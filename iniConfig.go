@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"io/ioutil"
 )
 
 // marshal 将data数据序列化为字节数组, data必须为struct
-/*
 func marshal(data interface{})(result []byte, err error) {
 	typeInfo := reflect.TypeOf(data)
 	if typeInfo.Kind() != reflect.Struct {
@@ -43,14 +43,20 @@ func marshal(data interface{})(result []byte, err error) {
 				filedTagVal = keyField.Name
 			}
 			valueField := sectionVal.Field(j)
-			item := fmt.Sprintf("%s=%v")
-
+			item := fmt.Sprintf("%s=%v\n", filedTagVal, valueField)
+			config = append(config, item)
 
 		}
 
 	}
+
+	for _, val := range config {
+		byteVal := []byte(val)
+		result = append(result, byteVal...)
+	}
+	return
 }
- */
+
 
 // unmarshal  fileData 表示获取的文件字节数组 confStruct 必须为struct 的ptr
 func unmarshal(fileData []byte, confStruct interface{})(err error) {
@@ -190,4 +196,18 @@ func parseItem(sectionName string, line string, confStruct interface{})(err erro
 }
 
 
+func MarshalFile(fileName string, data interface{})(err error) {
+	result, err:= marshal(data)
+	if err != nil {
+		return
+	}
+	return ioutil.WriteFile(fileName, result, 0755)
+}
 
+func UnmarshalFile(fileName string, result interface{})(err error) {
+	data, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		return
+	}
+	return unmarshal(data, result)
+}

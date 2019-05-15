@@ -67,5 +67,53 @@ func TestUnmarshalConfig(t *testing.T) {
 
 }
 
+func TestMarshalConfig(t *testing.T) {
+	fileData, err := ioutil.ReadFile("./config.ini")
+	if err != nil {
+		t.Error("open file error:",err)
+	}
+	var config Config
+	err = unmarshal(fileData, &config)
+	if err != nil {
+		t.Fatalf("unmarshal failed,err:%v",err)
+	}
+	t.Logf("unmarshal success config:%#v", config)
+
+	res , err := marshal(config)
+	if err != nil {
+		t.Fatalf("marshal error:%v", err)
+
+	}
+	t.Logf("marshal success res :%#v", res)
+}
+
+// 测试将结构体内容序列化到文件中
+func TestMarshalFile(t *testing.T) {
+	fileData, err := ioutil.ReadFile("./config.ini")
+	if err != nil {
+		t.Error("open file error:",err)
+	}
+	var config Config
+	err = unmarshal(fileData, &config)
+	if err != nil {
+		t.Fatalf("unmarshal failed,err:%v",err)
+	}
+	t.Logf("unmarshal success config:%#v", config)
+	err = MarshalFile("./test.ini", config)
+	if err != nil {
+		t.Fatalf("MarshalFile error:%v", err)
+	}
+	t.Logf("MarshalFile success")
+}
+
+func TestUnmarshalFile(t *testing.T) {
+	var config Config
+	err := UnmarshalFile("./config.ini", &config)
+	if err != nil {
+		t.Fatalf("UnmarshalFile failed err:%v",err)
+	}
+	t.Logf("UnmarshalFile success,Config:%#v",config)
+}
+
 
 
