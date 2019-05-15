@@ -25,15 +25,47 @@ type Config struct {
 }
 
 func TestUnmarshal(t *testing.T) {
-	fileData, err := ioutil.ReadFile("./confi.ini")
+	fileData, err := ioutil.ReadFile("./config.ini")
 	if err != nil {
 		t.Error("open file error:",err)
 	}
 	var config Config
-	err = unmarshal(fileData, config)
+	err = unmarshal(fileData, &config)
 	if err != nil {
 		t.Fatalf("unmarshal failed, err:%v",err)
 	}
+	t.Logf("unmarshal success config:%#v", config)
 
 }
+
+// 测试如果传入的不是config不是指针的时候的异常
+func TestUnmarshalConfigNOTPtr(t *testing.T) {
+	fileData, err := ioutil.ReadFile("./config.ini")
+	if err != nil {
+		t.Error("open file error:",err)
+	}
+	var config Config
+	err = unmarshal(fileData, &config)
+	if err != nil {
+		t.Fatalf("unmarshal failed,err:%v",err)
+	}
+	t.Logf("unmarshal success config:%#v", config)
+}
+
+
+func TestUnmarshalConfig(t *testing.T) {
+	fileData, err := ioutil.ReadFile("./config.ini")
+	if err != nil {
+		t.Error("open file error:",err)
+	}
+	var config Config
+	err = unmarshal(fileData, &config)
+	if err != nil {
+		t.Fatalf("unmarshal failed,err:%v",err)
+	}
+	t.Logf("unmarshal success config:%#v", config)
+
+}
+
+
 

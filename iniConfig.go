@@ -104,15 +104,15 @@ func parseSection(line string, typeInfo reflect.Type) (sectionName string, err e
 		return
 	}
 	if line[0] == '[' && line[len(line)-1] == ']' {
-		sectionName := strings.TrimSpace(line[1:len(line)-1])
-		if len(sectionName) == 0 {
+		sectionNameStr := strings.TrimSpace(line[1:len(line)-1])
+		if len(sectionNameStr) == 0 {
 			err = fmt.Errorf("error invalid sectionName:%s", line)
 			return
 		}
 		for i:=0;i<typeInfo.NumField();i++ {
 			field := typeInfo.Field(i)
 			tagValue := field.Tag.Get("ini")
-			if tagValue == sectionName {
+			if tagValue == sectionNameStr {
 				sectionName = field.Name
 				fmt.Println("sectionName name:", sectionName)
 				break
