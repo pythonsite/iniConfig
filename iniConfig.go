@@ -9,15 +9,15 @@ import (
 	"io/ioutil"
 )
 
-// marshal 将data数据序列化为字节数组, data必须为struct
-func marshal(data interface{})(result []byte, err error) {
-	typeInfo := reflect.TypeOf(data)
+// marshal 将dataStruct数据序列化为字节数组
+func marshal(dataStruct interface{})(result []byte, err error) {
+	typeInfo := reflect.TypeOf(dataStruct)
 	if typeInfo.Kind() != reflect.Struct {
 		err = errors.New("please pass struct")
 		return
 	}
 	var config []string
-	valueInfo := reflect.ValueOf(data)
+	valueInfo := reflect.ValueOf(dataStruct)
 	for i:=0;i<typeInfo.NumField();i++ {
 		sectionField := typeInfo.Field(i)
 		sectionVal := valueInfo.Field(i)
@@ -36,6 +36,7 @@ func marshal(data interface{})(result []byte, err error) {
 			section = fmt.Sprintf("[%s]\n", tagVal)
 		}
 		config = append(config, section)
+		// 处理循环每个子struct中的字段
 		for j :=0;j< fieldType.NumField();j++ {
 			keyField := fieldType.Field(j)
 			filedTagVal := keyField.Tag.Get("ini")
