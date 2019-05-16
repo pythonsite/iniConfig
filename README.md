@@ -38,8 +38,20 @@ type Config struct {
 ```
 
 通过UnmarshalFile方法即可将文件内容加载到定义的Config结构体中
+```$xslt
+config := &Config{}
+err := iniConfig.UnmarshalFile(fileName, config)
+```
 
 同样的也可以通过MarshalFile方法将结构体的内容写入到文件中
+```$xslt
+fileData, err := ioutil.ReadFile("./config.ini")
+if err != nil {
+    t.Error("open file error:",err)
+}
+var config Config
+err = unmarshal(fileData, &config)
+```
 
 
 
