@@ -2,11 +2,11 @@ package iniConfig
 
 import (
 	"errors"
-	"reflect"
 	"fmt"
+	"io/ioutil"
+	"reflect"
 	"strconv"
 	"strings"
-	"io/ioutil"
 )
 
 // marshal 将dataStruct数据序列化为字节数组
@@ -121,7 +121,7 @@ func parseSection(line string, typeInfo reflect.Type) (sectionName string, err e
 			tagValue := field.Tag.Get("ini")
 			if tagValue == sectionNameStr {
 				sectionName = field.Name
-				fmt.Println("sectionName name:", sectionName)
+				//fmt.Println("sectionName name:", sectionName)
 				break
 			}
 		}
